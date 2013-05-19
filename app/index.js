@@ -52,6 +52,12 @@ Generator.prototype.askFor = function askFor() {
     message: 'Would you like to include RequireJS (for AMD support)?',
     default: 'Y/n',
     warning: 'Yes: RequireJS will be placed into the JavaScript vendor directory.'
+  },
+  {
+    name: 'includeExpress',
+    message: 'Would you like to include Express application framework for node?',
+    default: 'Y/n',
+    warning: 'Yes: Express application files will be placed into the server directory.'
   }];
 
   this.prompt(prompts, function (err, props) {
@@ -63,6 +69,7 @@ Generator.prototype.askFor = function askFor() {
     // we change a bit this way of doing to automatically do this in the self.prompt() method.
     this.compassBootstrap = (/y/i).test(props.compassBootstrap);
     this.includeRequireJS = (/y/i).test(props.includeRequireJS);
+    this.includeExpress = (/y/i).test(props.includeExpress);
 
     cb();
   }.bind(this));
@@ -107,7 +114,7 @@ Generator.prototype.mainStylesheet = function mainStylesheet() {
 };
 
 Generator.prototype.writeIndex = function writeIndex() {
-  if (this.includeRequireJS) {
+  if (this.includeRequireJS || this.includeExpress) {
     return;
   }
 
@@ -197,6 +204,10 @@ Generator.prototype.writeIndexWithRequirejs = function writeIndexWithRequirejs()
     defaults.push('Twitter Bootstrap');
   }
 
+  if (this.includeExpress) {
+    defaults.push('Express');
+  }
+
   this.indexFile = this.appendScripts(this.indexFile, 'scripts/main.js', [
     'bower_components/requirejs/require.js',
   ], {'data-main': 'scripts/main'});
@@ -229,7 +240,16 @@ Generator.prototype.setupEnv = function setupEnv() {
   this.template('app/favicon.ico');
   this.template('app/robots.txt');
   this.copy('app/htaccess', 'app/.htaccess');
-  this.write('app/index.html', this.indexFile);
+  if (this.includeExpress) {
+    this.mkdir('server');
+    this.mkdir('server/routes');
+    this.mkdir('server/views');
+    this.template('server/views/index.html');
+    this.template('server/app.js');
+    this.write('server/views/layout.html', this.indexFile);
+  } else {
+    this.write('app/index.html', this.indexFile);
+  }
 };
 
 Generator.prototype.mainJs = function mainJs() {

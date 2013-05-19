@@ -1,8 +1,10 @@
 'use strict';
 var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
+<% if (!includeExpress) { %>
 var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
 };
+<% } %>
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -18,7 +20,8 @@ module.exports = function (grunt) {
     // configurable paths
     var yeomanConfig = {
         app: 'app',
-        dist: 'dist'
+        dist: 'dist',
+        server: 'server'
     };
 
     grunt.initConfig({
@@ -63,7 +66,31 @@ module.exports = function (grunt) {
                 ],
                 tasks: ['jst']
             }<% } %>
-        },
+        },<% if (includeExpress) { %>
+        express: {
+            options: {
+                port: 9000,
+                monitor: {},
+                debug: true,
+                server:  __dirname + '/server/app'
+            },
+            livereload: {
+                options: {
+                    bases: [lrSnippet, '.tmp', 'app']
+                }
+            },
+            test: {
+                options: {
+                    bases: ['.tmp', 'test']
+                }
+            },
+            dist: {
+                options: {
+                    bases: ['dist'],
+                    debug: false
+                }
+            }
+        },<% } else { %>
         connect: {
             options: {
                 port: 9000,
@@ -100,10 +127,10 @@ module.exports = function (grunt) {
                     }
                 }
             }
-        },
+        },<% } %>
         open: {
             server: {
-                path: 'http://localhost:<%%= connect.options.port %>'
+                path: <% if (includeExpress) { %> 'http://localhost:<%%= express.options.port %>' <% } else { %> 'http://localhost:<%%= connect.options.port %>' <% } %>
             }
         },
         clean: {
@@ -125,7 +152,7 @@ module.exports = function (grunt) {
             all: {
                 options: {
                     run: true,
-                    urls: ['http://localhost:<%%= connect.options.port %>/index.html']
+                    urls: <% if (includeExpress) { %> 'http://localhost:<%%= express.options.port %>' <% } else { %> 'http://localhost:<%%= connect.options.port %>/index.html' <% } %>
                 }
             }
         },
@@ -307,15 +334,17 @@ module.exports = function (grunt) {
         }<% } %>
     });
 
-    grunt.renameTask('regarde', 'watch');
-
     grunt.registerTask('createDefaultTemplate', function () {
         grunt.file.write('.tmp/scripts/templates.js', 'this.JST = this.JST || {};');
     });
 
     grunt.registerTask('server', function (target) {
         if (target === 'dist') {
-            return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+            if (includeExpress) {
+                return grunt.task.run(['build', 'open', 'express:dist', 'express-keepalive']);
+            } else {
+                return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+            }
         }
 
         grunt.task.run([
@@ -326,10 +355,14 @@ module.exports = function (grunt) {
             'handlebars',<% } else { %>
             'jst',<% } %>
             'compass:server',
-            'livereload-start',
+            'livereload-start',<% if (includeExpress) { %>
+            'express:livereload',
+            'open',
+            'watch',
+            'express-keepalive'<% } else { %>
             'connect:livereload',
             'open',
-            'watch'
+            'watch'<% } %>
         ]);
     });
 
@@ -340,8 +373,9 @@ module.exports = function (grunt) {
         'mustache',<% } else if (templateFramework === 'handlebars') { %>
         'handlebars',<% } else { %>
         'jst',<% } %>
-        'compass',
-        'connect:test',
+        'compass',<% if (includeExpress) { %>
+        'express:test',<% } else { %>
+        'connect:test',<% } %>
         'mocha'
     ]);
 
