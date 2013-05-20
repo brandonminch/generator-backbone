@@ -340,11 +340,11 @@ module.exports = function (grunt) {
 
     grunt.registerTask('server', function (target) {
         if (target === 'dist') {
-            if (includeExpress) {
+            <% if (includeExpress) { %>
                 return grunt.task.run(['build', 'open', 'express:dist', 'express-keepalive']);
-            } else {
+            <% } else { %>
                 return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
-            }
+            <% } %>
         }
 
         grunt.task.run([

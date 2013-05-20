@@ -245,6 +245,7 @@ Generator.prototype.setupEnv = function setupEnv() {
     this.mkdir('server/routes');
     this.mkdir('server/views');
     this.template('server/views/index.html');
+    this.template('server/routes/index.js');
     this.template('server/app.js');
     this.write('server/views/layout.html', this.indexFile);
   } else {
