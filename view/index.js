@@ -23,6 +23,8 @@ Generator.prototype.createViewFiles = function createViewFiles() {
     templateExt = '-template.mustache';
   } else if (templateFramework === 'handlebars') {
     templateExt = '.hbs';
+  } else if (templateFramework === 'swig') {
+    templateExt = '.html';
   }
   this.jst_path = path.join('app/scripts/templates', this.name + templateExt);
   var destFile = path.join('app/scripts/views', this.name + '-view.' + ext);

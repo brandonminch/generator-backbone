@@ -59,7 +59,7 @@ module.exports = function (grunt) {
                     '<%%= yeoman.app %>/scripts/templates/*.hbs'
                 ],
                 tasks: ['handlebars']
-            }<% } else { %>
+            }<% } else if (templateFramework !== 'swig') { %>
             jst: {
                 files: [
                     '<%%= yeoman.app %>/scripts/templates/*.ejs'
@@ -321,7 +321,7 @@ module.exports = function (grunt) {
                     '.tmp/scripts/templates.js': ['<%%= yeoman.app %>/scripts/templates/*.hbs']
                 }
             }
-        }<% } else { %>
+        }<% } else if (templateFramework !== 'swig') { %>
         jst: {<% if (includeRequireJS) { %>
             options: {
                 amd: true
@@ -352,7 +352,7 @@ module.exports = function (grunt) {
             'coffee:dist',
             'createDefaultTemplate',<% if (templateFramework === 'mustache') { %>
             'mustache',<% } else if (templateFramework === 'handlebars') { %>
-            'handlebars',<% } else { %>
+            'handlebars',<% } else if (templateFramework !== 'swig') { %>
             'jst',<% } %>
             'compass:server',
             'livereload-start',<% if (includeExpress) { %>
@@ -371,7 +371,7 @@ module.exports = function (grunt) {
         'coffee',
         'createDefaultTemplate',<% if (templateFramework === 'mustache' ) { %>
         'mustache',<% } else if (templateFramework === 'handlebars') { %>
-        'handlebars',<% } else { %>
+        'handlebars',<% } else if (templateFramework !== 'swig') { %>
         'jst',<% } %>
         'compass',<% if (includeExpress) { %>
         'express:test',<% } else { %>
@@ -384,7 +384,7 @@ module.exports = function (grunt) {
         'coffee',
         'createDefaultTemplate',<% if (templateFramework === 'mustache' ) { %>
         'mustache',<% } else if (templateFramework === 'handlebars') { %>
-        'handlebars',<% } else { %>
+        'handlebars',<% } else if (templateFramework !== 'swig') { %>
         'jst',<% } %>
         'compass:dist',
         'useminPrepare',<% if (includeRequireJS) { %>

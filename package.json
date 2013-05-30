@@ -1,7 +1,7 @@
 {
-  "name": "generator-backbone-express",
-  "version": "0.0.1",
-  "description": "Yeoman generator for Backbone.js and Express",
+  "name": "generator-backbone",
+  "version": "0.1.2",
+  "description": "Yeoman generator for Backbone.js",
   "keywords": [
     "yeoman-generator",
     "scaffold",
@@ -10,13 +10,13 @@
     "backbone",
     "express"
   ],
-  "homepage": "https://github.com/brandonminch/generator-backbone-express",
-  "bugs": "https://github.com/brandonminch/generator-backbone-express/issues",
-  "author": "Chrome Developer Relations & Brandon Minch",
+  "homepage": "https://github.com/yeoman/generator-backbone",
+  "bugs": "https://github.com/yeoman/generator-backbone/issues",
+  "author": "Chrome Developer Relations",
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/brandonminch/generator-backbone-express.git"
+    "url": "git://github.com/yeoman/generator-backbone.git"
   },
   "scripts": {
     "test": "mocha --reporter spec"

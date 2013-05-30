@@ -29,19 +29,19 @@ function Generator(args, options, config) {
   }
 
   // the api to hookFor and pass arguments may vary a bit.
-  this.hookFor('backbone:app', {
+  this.hookFor('backbone-express:app', {
     args: args
   });
-  this.hookFor('backbone:router', {
+  this.hookFor('backbone-express:router', {
     args: args
   });
-  this.hookFor('backbone:view', {
+  this.hookFor('backbone-express:view', {
     args: args
   });
-  this.hookFor('backbone:model', {
+  this.hookFor('backbone-express:model', {
     args: args
   });
-  this.hookFor('backbone:collection', {
+  this.hookFor('backbone-express:collection', {
     args: args
   });
 

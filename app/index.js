@@ -39,7 +39,7 @@ Generator.prototype.askFor = function askFor() {
   '\n ´   '+'`  |'.red+'° '+'´ Y'.red+' `\n';
 
   console.log(welcome);
-  console.log('Out of the box I include HTML5 Boilerplate, jQuery, Backbone.js and Modernizr.');
+  console.log('Out of the box I include HTML5 Boilerplate, jQuery, Backbone.js and Modernizr. And now Express!');
 
   var prompts = [{
     name: 'compassBootstrap',
@@ -240,6 +240,7 @@ Generator.prototype.setupEnv = function setupEnv() {
   this.template('app/favicon.ico');
   this.template('app/robots.txt');
   this.copy('app/htaccess', 'app/.htaccess');
+
   if (this.includeExpress) {
     this.mkdir('server');
     this.mkdir('server/routes');
